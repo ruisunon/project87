@@ -1,0 +1,35 @@
+<div class="content-container">
+  <div class="content-area">
+    <div class="clr-row">
+      <div class="clr-col-12">
+        <h2 style="text-align: center">Tickets</h2>
+      </div>
+    </div>
+    <div class="clr-row">
+      <div class="clr-col-12">
+        <clr-datagrid>
+          <clr-dg-column [clrDgField]="'id'">ID</clr-dg-column>
+          <clr-dg-column [clrDgField]="'firstName'">Seat Number</clr-dg-column>
+          <clr-dg-column [clrDgField]="'lastName'">Date</clr-dg-column>
+          <clr-dg-column>Action</clr-dg-column>
+          <!-- structural directive -->
+          <clr-dg-row clr-dg-row *clrDgItems="let ticket of tickets">
+            <clr-dg-cell>{{ticket.id}}</clr-dg-cell>
+            <clr-dg-cell>{{ticket.seatNumber}}</clr-dg-cell>
+            <clr-dg-cell>{{ticket.eventDate}}</clr-dg-cell>
+            <clr-dg-cell>
+              <cds-icon shape="trash" style="cursor: pointer; color: blue" (click)="bookTicket(ticket)">
+              </cds-icon>
+            </clr-dg-cell>
+          </clr-dg-row>
+          <clr-dg-footer>
+            <clr-dg-pagination #pagination [clrDgPageSize]="10">
+              <clr-dg-page-size [clrPageSizeOptions]="[10,20,50,100]">Tickets per page</clr-dg-page-size>
+              {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}} of {{pagination.totalItems}} tickets
+            </clr-dg-pagination>
+          </clr-dg-footer>
+        </clr-datagrid>
+      </div>
+    </div>
+  </div>
+</div>
