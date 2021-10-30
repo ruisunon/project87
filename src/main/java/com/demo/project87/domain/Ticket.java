@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.Table;
 import javax.persistence.Version;
 import javax.validation.constraints.Size;
@@ -19,6 +20,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+import org.hibernate.annotations.Type;
 
 @Entity
 @Table(name = "ticket")
@@ -53,6 +56,11 @@ public class Ticket implements Serializable {
     private Boolean entered = false;
     private String entryToken;
     private Double price;
+    @Lob
+    @Type(type = "org.hibernate.type.ImageType")
+    @JsonIgnore
+    @ToString.Exclude
+    private byte[] qrCode;
     @Version
     private int version;
 

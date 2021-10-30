@@ -1,5 +1,8 @@
 package com.demo.project87.controller;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.net.InetAddress;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -9,14 +12,22 @@ import javax.transaction.Transactional;
 import com.demo.project87.domain.BookingRequest;
 import com.demo.project87.domain.Ticket;
 import com.demo.project87.repo.TicketRepository;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.WriterException;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -41,7 +52,7 @@ public class HomeController {
 
     @PostMapping(value = "/api/ticket")
     public Boolean bookTicket(@RequestBody BookingRequest bookingRequest) {
-        log.info("Booking tickets! {}", bookingRequest);
+        log.info("Confirming Booking! {}", bookingRequest);
         return confirmBooking(bookingRequest);
     }
 
@@ -57,6 +68,28 @@ public class HomeController {
         return bookingHoldCall(bookingRequest, false);
     }
 
+    @GetMapping(value = "/api/admit/{entryToken}")
+    public String admit(@PathVariable String entryToken) {
+        Ticket ticket = ticketRepo.findByEntryTokenIs(entryToken);
+        if (ticketRepo.findByEntryTokenIs(entryToken) != null) {
+            ticket.setEntered(true);
+            ticketRepo.save(ticket);
+            return "ADMIT";
+        } else {
+            return "INVALID";
+        }
+    }
+
+    @GetMapping(value = "/api/qrcode/{entryToken}", produces = MediaType.IMAGE_JPEG_VALUE)
+    public @ResponseBody byte[] getQRCode(@PathVariable String entryToken) {
+        Ticket ticket = ticketRepo.findByEntryTokenIs(entryToken);
+        if (ticketRepo.findByEntryTokenIs(entryToken) != null) {
+            return ticket.getQrCode();
+        } else {
+            return null;
+        }
+    }
+
     @Transactional
     public Boolean confirmBooking(BookingRequest bookingRequest) {
         try {
@@ -69,6 +102,20 @@ public class HomeController {
                     ticket.setLockedBy("");
                     ticket.setBooked(true);
                     ticket.setBookedBy(bookingRequest.getUser());
+
+                    //Create the QR code for the ticket and store to DB.
+                    String entryToken = UUID.randomUUID().toString();
+                    ticket.setEntryToken(entryToken);
+                    String hostName = InetAddress.getLocalHost().getHostAddress();
+                    String entryUri = "http://" + hostName + ":8080/api/admit/" + entryToken;
+                    QRCodeWriter qrCodeWriter = new QRCodeWriter();
+                    BitMatrix bitMatrix = qrCodeWriter.encode(entryUri, BarcodeFormat.QR_CODE, 200, 200);
+                    try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+                        MatrixToImageWriter.writeToStream(bitMatrix, "PNG", baos);
+                        byte[] png = baos.toByteArray();
+                        ticket.setQrCode(png);
+                    }
+
                 } else {
                     log.info("Ticket: {} lock is held by other user!", ticket);
                     return false;
@@ -77,7 +124,13 @@ public class HomeController {
             ticketRepo.saveAll(tickets);
             return true;
         } catch (ObjectOptimisticLockingFailureException ex) {
-            log.error("booking confirmation failed", ex);
+            log.error("Booking confirmation failed due to lock, {}", ex.getMessage());
+            return false;
+        } catch (WriterException | IOException ex) {
+            log.error("Failed to generate QR code, {}", ex.getMessage());
+            return false;
+        } catch (Exception ex) {
+            log.error("Booking confirmation failed, {}", ex.getMessage());
             return false;
         }
 

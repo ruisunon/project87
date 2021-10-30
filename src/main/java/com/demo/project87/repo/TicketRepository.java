@@ -8,4 +8,6 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
 
     Iterable<Ticket> findAllByLockExpiryIsNotNull();
 
+    Ticket findByEntryTokenIs(String entryToken);
+
 }

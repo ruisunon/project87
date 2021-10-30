@@ -12,6 +12,8 @@
           <clr-dg-column [clrDgField]="'price'">Price</clr-dg-column>
           <clr-dg-column [clrDgField]="'booked'">Status</clr-dg-column>
           <clr-dg-column [clrDgField]="'bookedBy'">Booked By</clr-dg-column>
+          <clr-dg-column>QR Code</clr-dg-column>
+          <clr-dg-column [clrDgField]="'entered'">Entered</clr-dg-column>
           <!-- structural directive -->
           <clr-dg-row clr-dg-row *clrDgItems="let ticket of tickets" [clrDgItem]="ticket"
                       [clrDgSelectable]="getSeatStatus(ticket) === 'AVAILABLE'">
@@ -21,6 +23,14 @@
             <clr-dg-cell>{{ticket.price}}</clr-dg-cell>
             <clr-dg-cell>{{getSeatStatus(ticket)}}</clr-dg-cell>
             <clr-dg-cell>{{ticket.bookedBy}}</clr-dg-cell>
+            <clr-dg-cell >
+              <a *ngIf="getSeatStatus(ticket) === 'BOOKED'" href="/api/qrcode/{{ticket.entryToken}}"
+                 target="_blank">QR Code</a>
+            </clr-dg-cell>
+            <clr-dg-cell>
+              <cds-icon *ngIf="ticket.entered" shape="success-standard" status="success" title="Admitted"
+                        class="action-icon" solid></cds-icon>
+            </clr-dg-cell>
           </clr-dg-row>
 
           <clr-dg-footer>
