@@ -25,7 +25,7 @@
             <clr-dg-cell>{{ticket.bookedBy}}</clr-dg-cell>
             <clr-dg-cell >
               <a *ngIf="getSeatStatus(ticket) === 'BOOKED'" href="/api/qrcode/{{ticket.entryToken}}"
-                 target="_blank">QR Code</a>
+                 target="_blank">Ticket</a>
             </clr-dg-cell>
             <clr-dg-cell>
               <cds-icon *ngIf="ticket.entered" shape="success-standard" status="success" title="Admitted"
