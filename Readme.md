@@ -32,11 +32,6 @@ cd project87
 
 Open [http://localhost:4200](http://localhost:4200) to view it in the browser.
 
-```
-user: admin
-pwd: admin@123
-```
-
 ### Prod
 To run as a single jar, both UI and backend are bundled to single uber jar.
 
@@ -48,24 +43,5 @@ java -jar project87-1.0.0.jar
 
 Open [http://localhost:8080](http://localhost:8080) to view it in the browser.
 
-```
-user: admin
-pwd: admin@123
-```
 
-## Advanced Topics
-
-@Input - Parent to child communication.
-
-@Output - Child to parent communication. EventEmitter.
-
-Pipes - Custom Pipe
-
-HTTP error handling
-
-Route parameters - ActivatedRoute.
-
-Nested routes - children, router-outlet.
-
-Named router outlet.
 
