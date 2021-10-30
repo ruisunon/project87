@@ -1,8 +1,5 @@
 import {Component} from '@angular/core';
 
-/**
- * The type of alert banner to display
- */
 export enum AlertType {
   SUCCESS,
   WARNING,

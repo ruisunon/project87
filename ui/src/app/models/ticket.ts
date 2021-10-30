@@ -2,10 +2,11 @@ export class Ticket {
   'id': 'Number';
   'seatNumber': 'String';
   'bookedBy': 'String';
-  'lock': 'Boolean';
+  'lockedBy': 'String';
   'booked': 'Boolean';
   'entryToken': 'String';
   'entered': 'Boolean';
-  'eventDate' : 'Date';
+  'eventDate': 'Date';
+  'price': 'Number';
 
 }

@@ -2,23 +2,22 @@
 
 Ticket booking
 
-## HSQL DB
+## Postgres DB
 
-1. Download HSQLDB bundle <http://hsqldb.org/> (<https://sourceforge.net/projects/hsqldb/files/hsqldb/hsqldb_2_6/hsqldb-2.6.0.zip/download>)
-2. Run the command below to create the db.
-   java -cp lib/hsqldb.jar org.hsqldb.server.Server --database.0 file:data/mydb --dbname.0 mydb
-3. To connect to the DB via UI
-   java -cp lib/hsqldb.jar org.hsqldb.util.DatabaseManagerSwing
-   jdbc:hsqldb:hsql://localhost:9001/mydb
-   user: SA
-   pwd:
+```
+docker run -p 5432:5432 --name pg-container -e POSTGRES_PASSWORD=password -d postgres:9.6.10
+docker exec -it postgres psql -U postgres -W postgres
+CREATE USER test WITH PASSWORD 'test';
+CREATE DATABASE "test-db" WITH OWNER "test" ENCODING UTF8 TEMPLATE template0;
+grant all PRIVILEGES ON DATABASE "test-db" to test;
+```
 
 ### Dev
 
 To Run UI in DEV mode
 
 ```bash
-cd project81/ui
+cd project87/ui
 yarn install
 yarn build
 yarn start
@@ -27,7 +26,7 @@ yarn start
 To Run backend in DEV mode
 
 ```bash
-cd project81
+cd project87
 ./gradlew bootRun
 ```
 
@@ -43,8 +42,8 @@ To run as a single jar, both UI and backend are bundled to single uber jar.
 
 ```bash
 ./gradlew cleanBuild
-cd project81/build/libs
-java -jar project81-1.0.0.jar
+cd project87/build/libs
+java -jar project87-1.0.0.jar
 ```
 
 Open [http://localhost:8080](http://localhost:8080) to view it in the browser.

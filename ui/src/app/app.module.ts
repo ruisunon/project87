@@ -10,24 +10,26 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
 import {RestService} from './services/rest.service';
 import {NavbarComponent} from './components/navbar/navbar.component';
+import {AlertComponent} from './components/alert/alert.component';
 
 @NgModule({
-    declarations: [
-        AppComponent,
-        HomeComponent,
-        NavbarComponent,
-    ],
-    imports: [
-        BrowserModule,
-        AppRoutingModule,
-        ClarityModule,
-        BrowserAnimationsModule,
-        FormsModule,
-        ReactiveFormsModule,
-        HttpClientModule,
-    ],
-    providers: [RestService],
-    bootstrap: [AppComponent]
+  declarations: [
+    AppComponent,
+    HomeComponent,
+    NavbarComponent,
+    AlertComponent
+  ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    ClarityModule,
+    BrowserAnimationsModule,
+    FormsModule,
+    ReactiveFormsModule,
+    HttpClientModule,
+  ],
+  providers: [RestService],
+  bootstrap: [AppComponent]
 })
 export class AppModule {
 }
