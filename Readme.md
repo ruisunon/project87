@@ -2,7 +2,9 @@
 
 Ticket booking for large scale with QR code tickets.
 
-## Postgres DB
+## Setup
+
+### Postgres DB
 
 ```
 docker run -p 5432:5432 --name pg-container -e POSTGRES_PASSWORD=password -d postgres:9.6.10
