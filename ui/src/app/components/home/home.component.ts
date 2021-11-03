@@ -38,7 +38,7 @@ export class HomeComponent implements OnInit {
   holdBooking(): void {
     const request = new BookingRequest();
     request.ticketIds = [];
-    request.user = localStorage.getItem('user');
+    request.user = sessionStorage.getItem('user');
     this.selected.forEach(item => {
       request.ticketIds.push(Number(item.id));
     });
@@ -61,7 +61,7 @@ export class HomeComponent implements OnInit {
   cancelBooking(): void {
     const request = new BookingRequest();
     request.ticketIds = [];
-    request.user = localStorage.getItem('user');
+    request.user = sessionStorage.getItem('user');
     this.selected.forEach(item => {
       request.ticketIds.push(Number(item.id));
     });
@@ -74,7 +74,7 @@ export class HomeComponent implements OnInit {
   confirmBooking(): void {
     const request = new BookingRequest();
     request.ticketIds = [];
-    request.user = localStorage.getItem('user');
+    request.user = sessionStorage.getItem('user');
     this.selected.forEach(item => {
       request.ticketIds.push(Number(item.id));
     });
